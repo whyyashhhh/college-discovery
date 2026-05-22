@@ -1,4 +1,4 @@
-import { CollegeType, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = process.env.DATABASE_URL;
@@ -30,7 +30,7 @@ async function main() {
       location: "Powai, Mumbai, Maharashtra",
       city: "Mumbai",
       state: "Maharashtra",
-      type: CollegeType.ENGINEERING,
+      type: "ENGINEERING" as const,
       rating: 4.8,
       totalFees: 800000,
       establishedYear: 1958,
@@ -69,7 +69,7 @@ async function main() {
       location: "Hauz Khas, New Delhi, Delhi",
       city: "New Delhi",
       state: "Delhi",
-      type: CollegeType.ENGINEERING,
+      type: "ENGINEERING" as const,
       rating: 4.9,
       totalFees: 780000,
       establishedYear: 1961,
@@ -108,7 +108,7 @@ async function main() {
       location: "Tiruchirappalli, Tamil Nadu",
       city: "Tiruchirappalli",
       state: "Tamil Nadu",
-      type: CollegeType.ENGINEERING,
+      type: "ENGINEERING" as const,
       rating: 4.5,
       totalFees: 600000,
       establishedYear: 1964,
@@ -147,7 +147,7 @@ async function main() {
       location: "Pilani, Rajasthan",
       city: "Pilani",
       state: "Rajasthan",
-      type: CollegeType.ENGINEERING,
+      type: "ENGINEERING" as const,
       rating: 4.6,
       totalFees: 2200000,
       establishedYear: 1964,
@@ -186,7 +186,7 @@ async function main() {
       location: "Vastrapur, Ahmedabad, Gujarat",
       city: "Ahmedabad",
       state: "Gujarat",
-      type: CollegeType.MANAGEMENT,
+      type: "MANAGEMENT" as const,
       rating: 4.9,
       totalFees: 2500000,
       establishedYear: 1961,
