@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model College {
+  id              String       @id @default(cuid())
+  name            String
+  slug            String       @unique
+  location        String
+  city            String
+  state           String
+  type            CollegeType
+  rating          Float        @default(0)
+  totalFees       Int
+  establishedYear Int?
+  imageUrl        String?
+  description     String?
+  website         String?
+  accreditation   String?
+  courses         Course[]
+  placements      Placement[]
+  reviews         Review[]
+  examCutoffs     ExamCutoff[]
+  savedBy         SavedCollege[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Course {
+  id          String  @id @default(cuid())
+  college     College @relation(fields: [collegeId], references: [id])
+  collegeId   String
+  name        String
+  degree      String
+  duration    Int
+  fees        Int
+  seats       Int?
+  eligibility String?
+}
+
+model Placement {
+  id            String   @id @default(cuid())
+  college       College  @relation(fields: [collegeId], references: [id])
+  collegeId     String
+  year          Int
+  avgSalary     Int
+  highestSalary Int
+  placementRate Float
+  topRecruiters String[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  college   College  @relation(fields: [collegeId], references: [id])
+  collegeId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Float
+  title     String
+  content   String
+  pros      String?
+  cons      String?
+  createdAt DateTime @default(now())
+}
+
+model ExamCutoff {
+  id         String  @id @default(cuid())
+  college    College @relation(fields: [collegeId], references: [id])
+  collegeId  String
+  examName   String
+  category   String
+  cutoffRank Int
+  year       Int
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  savedColleges SavedCollege[]
+  createdAt     DateTime       @default(now())
+}
+
+model SavedCollege {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  college   College  @relation(fields: [collegeId], references: [id])
+  collegeId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, collegeId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum CollegeType {
+  ENGINEERING
+  MEDICAL
+  MANAGEMENT
+  ARTS
+  SCIENCE
+  LAW
+  DESIGN
+}
